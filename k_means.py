@@ -10,8 +10,8 @@ clust_1 = []
 clust_2 = []
 clust_3 = []
 
-X = [0,2,0,0,1,1,1,10,9,8,9,10,9,8,6,7,8,9]
-Y = [0,1,3,1,2,4,0,10,8,9,10,8,10,0,1,4,2,4]
+X = [0,2,0,0,1,2,3,1,1,5,1,10,9,7,7,8,9,10,9,8,6,7,8,9]
+Y = [1,0,1,3,4,1,2,4,0,10,8,7,9,10,7,8,10,0,2,3,1,4,2,4]
 datas = []
 for idx, i in enumerate(X):
     datas.append([i,Y[idx]])
@@ -34,7 +34,7 @@ def find_clust(datas_clust):
     return clust_1, clust_2, clust_3
 
 def generate_rep(clust):
-    print("GENERATION REP")
+    # print("GENERATION REP")
     varx = 0
     vary = 0
     rep = []
@@ -43,7 +43,7 @@ def generate_rep(clust):
         varx += i
         vary += j
     rep = [varx / lol, vary / lol]
-    print(rep)
+    # print(rep)
     return rep
 
 def redefinition_cluster(rep1, rep2, rep3, data):
@@ -74,9 +74,9 @@ def main():
     rep2 = generate_rep(clust_2)
     rep3 = generate_rep(clust_3)
     p = redefinition_cluster(rep1,rep2,rep3,datas)
-    print('premier iter OK')
+    # print('premier iter OK')
 
-    for i in range(0,9):
+    for i in range(0,5000):
         print('iter ' + str(i))
         clust_1, clust_2, clust_3 = find_clust(p)
         rep1 = generate_rep(clust_1)
@@ -87,17 +87,41 @@ def main():
     aX, aY = rep1
     bX, bY = rep2
     cX, cY = rep3
+    I = [aX,bX,cX]
+    dunno = [aY, bY, cY]
 
     print(p)
 
-    plt.scatter(X, Y, s=50)
-    plt.scatter(aX, aY, s=50)
-    plt.scatter(bX, bY, s=50)
-    plt.scatter(cX, cY, s=50)
-    plt.title('Nuage de points avec Matplotlib')
+    roger = []
+    aime = []
+    le = []
+    houmous = []
+    bien = []
+    fait = []
+
+    for pts in p:
+        a,b = pts
+        if b == 0:
+            c, d = a
+            roger.append(c)
+            aime.append(d)
+        if b == 1:
+            c, d = a
+            le.append(c)
+            houmous.append(d)
+        if b == 2:
+            c, d = a
+            bien.append(c)
+            fait.append(d)
+
+    plt.scatter(roger, aime, s=50)
+    plt.scatter(le, houmous, s=50)
+    plt.scatter(bien, fait, s=50)
+    plt.scatter(I, dunno, s=50)
+    plt.title('5000 iterations')
     plt.xlabel('x')
     plt.ylabel('y')
-    plt.savefig('Test.png')
+    plt.savefig('K_means_5.png')
     plt.show()
 
 
