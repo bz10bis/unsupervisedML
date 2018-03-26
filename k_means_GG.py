@@ -9,6 +9,7 @@ datas_clust = []
 clust_1 = []
 clust_2 = []
 clust_3 = []
+iter = 250
 
 X = [0,2,0,0,1,2,3,1,1,5,1,10,9,7,7,8,9,10,9,8,6,7,8,9]
 Y = [1,0,1,3,4,1,2,4,0,10,8,7,9,10,7,8,10,0,2,3,1,4,2,4]
@@ -76,8 +77,8 @@ def main():
     p = redefinition_cluster(rep1,rep2,rep3,datas)
     # print('premier iter OK')
 
-    for i in range(0,5000):
-        print('iter ' + str(i))
+    for i in range(0,iter):
+        # print('iter ' + str(i))
         clust_1, clust_2, clust_3 = find_clust(p)
         rep1 = generate_rep(clust_1)
         rep2 = generate_rep(clust_2)
@@ -118,7 +119,7 @@ def main():
     plt.scatter(le, houmous, s=50)
     plt.scatter(bien, fait, s=50)
     plt.scatter(I, dunno, s=50)
-    plt.title('5000 iterations')
+    plt.title(str(iter) + ' iterations')
     plt.xlabel('x')
     plt.ylabel('y')
     plt.savefig('K_means_5.png')
@@ -126,12 +127,3 @@ def main():
 
 
 main()
-
-
-# Triche
-
-# kmeans = KMeans(n_clusters=3, random_state=0).fit(datas)
-# print(kmeans.labels_)
-# print(kmeans.predict([[0, 0], [4, 4], [8,8]]))
-# print(kmeans.cluster_centers_)
-
