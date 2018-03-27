@@ -17,14 +17,14 @@ x_test = x_test.reshape((len(x_test), np.prod(x_test.shape[1:])))
 
 encoding_dim = 3
 input_img = Input(shape=(784,))
-encoded = Dense(encoding_dim, activation='relu')(input_img)
-decoded = Dense(784, activation='sigmoid')(encoded)
+encoded = Dense(encoding_dim, activation='tanh')(input_img)
+decoded = Dense(784, activation='linear')(encoded)
 autoencoder = Model(input_img, decoded)
 encoder = Model(input_img, encoded)
 encoded_input = Input(shape=(encoding_dim,))
-autoencoder.compile(optimizer='adadelta', loss='binary_crossentropy')
+autoencoder.compile(optimizer='sgd', loss='mse')
 autoencoder.fit(x_train, x_train,
-                epochs=50,
+                epochs=1000,
                 batch_size=256,
                 shuffle=True,
                 validation_data=(x_test, x_test))
@@ -66,9 +66,9 @@ z8 = []
 x9 = []
 y9 = []
 z9 = []
-
-fig = plt.figure(figsize=(8,8))
-ax = fig.add_subplot(111, projection='3d')
+#
+# fig = plt.figure(figsize=(8,8))
+# ax = fig.add_subplot(111, projection='3d')
 
 plt.rcParams['legend.fontsize'] = 10
 for line in encoded_labels:
@@ -115,19 +115,19 @@ for line in encoded_labels:
     else:
         print("c'est mort")
 
-ax.plot(x0, y0, z0, 'o', markersize=8, color='blue', alpha=0.5, label='class1')
-ax.plot(x1, y1, z1, 'o', markersize=8, color='green', alpha=0.5, label='class1')
-ax.plot(x2, y2, z2, 'o', markersize=8, color='red', alpha=0.5, label='class1')
-ax.plot(x3, y3, z3, 'o', markersize=8, color='orange', alpha=0.5, label='class1')
-ax.plot(x4, y4, z4, 'o', markersize=8, color='yellow', alpha=0.5, label='class1')
-ax.plot(x5, y5, z5, 'o', markersize=8, color='grey', alpha=0.5, label='class1')
-ax.plot(x6, y6, z6, 'o', markersize=8, color='pink', alpha=0.5, label='class1')
-ax.plot(x7, y7, z7, 'o', markersize=8, color='lightblue', alpha=0.5, label='class1')
-ax.plot(x8, y8, z8, 'o', markersize=8, color='lightgreen', alpha=0.5, label='class1')
-ax.plot(x9, y9, z9, 'o', markersize=8, color='darkgrey', alpha=0.5, label='class1')
+plt.scatter(x0, y0, s=50)
+plt.scatter(x1, y1, s=50)
+plt.scatter(x2, y2, s=50)
+plt.scatter(x3, y3, s=50)
+plt.scatter(x4, y4, s=50)
+plt.scatter(x5, y5, s=50)
+plt.scatter(x6, y6, s=50)
+plt.scatter(x7, y7, s=50)
+plt.scatter(x8, y8, s=50)
+plt.scatter(x9, y9, s=50)
 
-plt.title('Samples for class 1 and class 2')
-ax.legend(loc='upper right')
-plt.savefig('colorful.png')
+# plt.title('Samples for class 1 and class 2')
+# ax.legend(loc='upper right')
+plt.savefig('colorful_4.png')
 
 plt.show()
