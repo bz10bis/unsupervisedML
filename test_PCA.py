@@ -1,11 +1,14 @@
 import numpy as np
 import matplotlib
 import sklearn
+from keras.layers import Input, Dense
+from keras.models import Model
 from matplotlib import pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d import proj3d
 from matplotlib.patches import FancyArrowPatch
 from keras.datasets import mnist
+from sklearn.model_selection import train_test_split
 
 from sklearn.manifold import TSNE
 from sklearn.decomposition import PCA
@@ -76,6 +79,40 @@ class PCA_custom(object):
         self.decompressed = np.dot(self.transformed_dataset, self.sorted_vectors.T)
         self.show_images_transformed(10)
 
+        training, test, labels_train, labels_test = train_test_split(self.decompressed, [], test_size=0.20, random_state=42)
+        x_train = training.astype('float32') / 255.
+        x_test = test.astype('float32') / 255.
+        x_train = x_train.reshape((len(x_train), np.prod(x_train.shape[1:])))
+        x_test = x_test.reshape((len(x_test), np.prod(x_test.shape[1:])))
+
+
+        encoding_dim = 32
+        input_img = Input(shape=(1024,))
+        encoded = Dense(encoding_dim, activation='sigmoid')(input_img)
+        decoded = Dense(1024, activation='linear')(encoded)
+        autoencoder = Model(input_img, decoded)
+        encoder = Model(input_img, encoded)
+        encoded_input = Input(shape=(encoding_dim,))
+        autoencoder.compile(optimizer='sgd', loss='mse')
+        autoencoder.fit(x_train, x_train,
+                        epochs=100,
+                        batch_size=256,
+                        shuffle=True,
+                        validation_data=(x_test, x_test))
+
+        encoded_imgs = encoder.predict(x_test)
+
+        plt.rcParams['legend.fontsize'] = 10
+        X = Y = Z = []
+
+        for line in encoded_imgs:
+            X.append(line[0])
+            Y.append(line[1])
+            Z.append(line[2])
+
+        plt.scatter(X, Y, s=50)
+        plt.show()
+
     def show_samples(self):
 
         plt.scatter(self.transformed_dataset[:, 1],
@@ -122,4 +159,4 @@ import os
 
 #PCA_custom(size of images, nbr of dimension at the end, nbr of samples)
 #PCA_custom(28, 50, 60000, mode='mnist')
-PCA_custom(32, 1022, 10000, mode='hand')
+PCA_custom(32, 1024, 10000, mode='hand')
