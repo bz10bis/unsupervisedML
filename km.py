@@ -36,7 +36,7 @@ nombre_exemples = 50 #@param {type:"integer"}
 
 """## Définition de la fonction Kmeans"""
 
-def kmean(data, k, epochs, label):
+def kmean(data, k, epochs, labels):
   start_time = time.time()
   print("#" * 20 + " KMEANS " + "#" * 20)
   print("data shape\tnb clusters\tnbepochs")
@@ -62,11 +62,12 @@ def kmean(data, k, epochs, label):
   print("-"*50)  
   print("FINAL {}".format(counts))
   print("Elapse time: {} s".format(round(time.time() - start_time, 2)))
-  plt.figure(1)
+  hist = []
   for c in range(k):
-    ax = plt.subplot(2, 5, c+1)
-    ax.set_title(c)
-    plt.hist([x for x in np.where(assignments == c)])
+    hist.append([])
+  for i in range(len(labels)):
+    hist[labels[i]].append(assignments[i])
+  plt.hist(hist)
   plt.show()
 kmean(data, clusters, epochs, label)
 
