@@ -30,7 +30,7 @@ data = data.reshape(60000, 784)
 """## Déclaration des parametres"""
 
 #@title Parametres
-epochs = 10 #@param {type:"integer"}
+epochs = 200 #@param {type:"integer"}
 clusters = 10 #@param {type:"slider", min:0, max:20, step:1}
 nombre_exemples = 50 #@param {type:"integer"}
 
@@ -48,7 +48,6 @@ def kmean(data, k, epochs, label):
   rows = np.arange(n)
   c_idx = np.random.choice(n, k)
   centroids = data[c_idx].T
-  print(centroids.shape)
   repeated_data = np.stack([data] * k, axis=-1)
   for i in range(epochs):
     local_time = time.time()
