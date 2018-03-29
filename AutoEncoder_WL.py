@@ -24,7 +24,7 @@ encoder = Model(input_img, encoded)
 encoded_input = Input(shape=(encoding_dim,))
 autoencoder.compile(optimizer='sgd', loss='mse')
 autoencoder.fit(x_train, x_train,
-                epochs=1000,
+                epochs=300,
                 batch_size=256,
                 shuffle=True,
                 validation_data=(x_test, x_test))
