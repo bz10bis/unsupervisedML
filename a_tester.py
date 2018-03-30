@@ -10,7 +10,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from mpl_toolkits.mplot3d import proj3d
 
 (x_train, _), (x_test, label) = mnist.load_data()
-
+datas = x_train
 x_train = x_train.astype('float32') / 255.
 x_test = x_test.astype('float32') / 255.
 
@@ -21,16 +21,14 @@ encoding_dim = 2
 input_img = Input(shape=(784,))
 encoded = Dense(encoding_dim, activation='tanh')(input_img)
 decoded = Dense(784, activation='linear')(encoded)
-
 model = Model(input_img, [decoded, encoded])
-
 model.compile(optimizer='sgd', loss=[mse, mse], loss_weights=[1, 0])
 
-model.fit(np.array(x_train), np.array(x_train),
+model.fit(np.array(x_train),
           epochs=50,
           batch_size=256,
           shuffle=True,
-          validation_data=(x_test, x_test))
+          validation_data=(np.array(x_test)))
 
 encoded_imgs = model.predict(x_test)
 model.save('model.h5')
